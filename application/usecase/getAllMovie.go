@@ -6,18 +6,18 @@ import (
 )
 
 type GetAllMovieUseCase interface {
-	Handler() (model.Movie, error)
+	Handler() ([]model.Movie, error)
 }
 
 type UseCaseGetAllMovie struct {
-	MovieService service.MovieService
+	movieService service.MovieService
 }
 
 func (useCaseGetAllMovie *UseCaseGetAllMovie) Handler() ([]model.Movie, error) {
 
-	[]movie, err := useCaseGetMovie.MovieService.FindAll(idd)
+	movies, err := useCaseGetAllMovie.movieService.FindAll()
 	if err != nil {
-		return model.Movie{}, err
+		return []model.Movie{}, err
 	}
-	return movie, nil
+	return movies, nil
 }

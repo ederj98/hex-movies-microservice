@@ -7,14 +7,14 @@ type DeleteMovieUseCase interface {
 }
 
 type UseCaseDeleteMovie struct {
-	MovieService service.MovieService
+	movieService service.MovieService
 }
 
 func (useCaseDeleteMovie *UseCaseDeleteMovie) Handler(id int64) error {
-	movie, getMovieError := useCaseDeleteMovie.MovieService.Find(id)
+	_, getMovieError := useCaseDeleteMovie.movieService.Find(id)
 	if getMovieError != nil {
 		return getMovieError
 	}
-	err := useCaseDeleteMovie.MovieService.Delete(id)
+	err := useCaseDeleteMovie.movieService.Delete(id)
 	return err
 }

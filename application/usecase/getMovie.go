@@ -10,12 +10,12 @@ type GetMovieUseCase interface {
 }
 
 type UseCaseGetMovie struct {
-	MovieService service.MovieService
+	movieService service.MovieService
 }
 
 func (useCaseGetMovie *UseCaseGetMovie) Handler(id int64) (model.Movie, error) {
 
-	movie, err := useCaseGetMovie.MovieService.Find(userId)
+	movie, err := useCaseGetMovie.movieService.Find(id)
 	if err != nil {
 		return model.Movie{}, err
 	}

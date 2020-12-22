@@ -29,38 +29,38 @@ func StartApplication() {
 
 func createHandler(movieRepository repository.MovieRepository) controller.RedirectMovieHandler {
 
-	return newHandler(newCreatesUseCase(userRepository), newGetUserUseCase(userRepository),
-		newUpdateUserUseCase(userRepository), newDeleteUserUseCase(userRepository),
-		newFindUsersByStatusUseCase(userRepository))
+	return newHandler(newCreateUseCase(movieRepository), newGetMovieUseCase(movieRepository),
+		newGetAllMoviesUseCase(movieRepository), newUpdateMovieUseCase(movieRepository),
+		newDeleteMovieUseCase(movieRepository))
 }
 
 func newCreateUseCase(repository repository.MovieRepository) usecase.CreateMoviePort {
 	return &usecase.UseCaseMovieCreate{
-		MovieRepository: repository,
+		movieRepository: repository,
 	}
 }
 
 func newGetMovieUseCase(repository repository.MovieRepository) usecase.GetMovieUseCase {
 	return &usecase.UseCaseGetMovie{
-		MovieRepository: repository,
+		movieRepository: repository,
 	}
 }
 
 func newGetAllMoviesUseCase(repository repository.MovieRepository) usecase.GetAllMovieUseCase {
 	return &usecase.UseCaseGetAllMovie{
-		MovieRepository: repository,
+		movieRepository: repository,
 	}
 }
 
 func newUpdateMovieUseCase(repository repository.MovieRepository) usecase.UpdateMoviePort {
 	return &usecase.UseCaseMovieUpdate{
-		MovieRepository: repository,
+		movieRepository: repository,
 	}
 }
 
-func newDeleteUserUseCase(repository repository.MovieRepository) usecase.DeleteMovieUseCase {
+func newDeleteMovieUseCase(repository repository.MovieRepository) usecase.DeleteMovieUseCase {
 	return &usecase.UseCaseDeleteMovie{
-		MovieRepository: repository,
+		movieRepository: repository,
 	}
 }
 

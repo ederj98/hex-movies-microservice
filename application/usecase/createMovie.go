@@ -12,7 +12,7 @@ type CreateMoviePort interface {
 }
 
 type UseCaseMovieCreate struct {
-	MovieService service.MovieService
+	movieService service.MovieService
 }
 
 func (createUseCase *UseCaseMovieCreate) Handler(movieCommand command.MovieCommand) (model.Movie, error) {
@@ -21,7 +21,7 @@ func (createUseCase *UseCaseMovieCreate) Handler(movieCommand command.MovieComma
 	if err != nil {
 		return model.Movie{}, err
 	}
-	createMovieErr := createUseCase.MovieService.Create(&movie)
+	_, createMovieErr := createUseCase.movieService.Create(&movie)
 	if createMovieErr != nil {
 		return model.Movie{}, createMovieErr
 	}

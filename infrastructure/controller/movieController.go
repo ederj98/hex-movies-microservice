@@ -8,6 +8,7 @@ import (
 	"github.com/ederj98/hex-movies-microservice/infrastructure/marshall"
 
 	"github.com/ederj98/hex-movies-microservice/application/usecase"
+	"github.com/fmcarrero/bookstore_utils-go/rest_errors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -59,8 +60,19 @@ func (h *Handler) Get(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, marshallers.Marshall(false, movie))
+	c.JSON(http.StatusOK, marshall.Marshall(false, movie))
 
+}
+
+func (h *Handler) GetAll(c *gin.Context) {
+	movies, err := h.GetAllUseCase.Handler()
+	if err != nil {
+		restErr := rest_errors.NewBadRequestError(err.Error())
+		c.JSON(restErr.Status(), restErr)
+		return
+	}
+
+	c.JSON(http.StatusOK, marshall.MarshallArray(false, movies))
 }
 
 func (h *Handler) Update(c *gin.Context) {
@@ -94,15 +106,4 @@ func (h *Handler) Delete(c *gin.Context) {
 		return
 	}
 	c.Status(http.StatusNoContent)
-}
-
-func (h *Handler) FindByStatus(c *gin.Context) {
-	movies, err := h.GetAllUseCase.Handler()
-	if err != nil {
-		restErr := rest_errors.NewBadRequestError(err.Error())
-		c.JSON(restErr.Status(), restErr)
-		return
-	}
-
-	c.JSON(http.StatusOK, marshallers.MarshallArray(false, movies))
 }

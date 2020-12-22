@@ -7,10 +7,10 @@ import (
 
 type MovieService interface {
 	Create(*model.Movie) (*model.Movie, error)
-	Find(int) (*model.Movie, error)
+	Find(int64) (model.Movie, error)
 	FindAll() ([]model.Movie, error)
-	Update(*model.Movie) (*model.Movie, error)
-	Delete(int)
+	Update(*model.Movie) error
+	Delete(int64) error
 }
 
 type Service struct {
@@ -25,7 +25,7 @@ func (service *Service) Create(movie *model.Movie) (*model.Movie, error) {
 	return service.repository.Create(movie)
 }
 
-func (service *Service) Find(id int) (*model.Movie, error) {
+func (service *Service) Find(id int64) (model.Movie, error) {
 	return service.repository.Find(id)
 }
 
@@ -37,6 +37,6 @@ func (service Service) Update(movie *model.Movie) error {
 	return service.repository.Update(movie)
 }
 
-func (service Service) Delete(id int) error {
+func (service Service) Delete(id int64) error {
 	return service.repository.Delete(id)
 }
