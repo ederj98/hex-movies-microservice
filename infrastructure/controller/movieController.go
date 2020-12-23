@@ -36,14 +36,13 @@ func (h *Handler) Create(c *gin.Context) {
 		c.JSON(restErr.Status(), restErr)
 		return
 	}
-	result, createMovieErr := h.CreateUseCase.Handler(movieCommand)
+	createMovieErr := h.CreateUseCase.Handler(movieCommand)
 
 	if createMovieErr != nil {
 		_ = c.Error(createMovieErr)
 		return
 	}
-	isPublic := c.GetHeader("X-Public") == "true"
-	c.JSON(http.StatusCreated, marshall.Marshall(isPublic, result))
+	c.Status(http.StatusCreated)
 }
 
 func (h *Handler) Get(c *gin.Context) {
@@ -56,7 +55,8 @@ func (h *Handler) Get(c *gin.Context) {
 	}
 	movie, errGet := h.GetUseCase.Handler(id)
 	if errGet != nil {
-		_ = c.Error(errGet)
+		restErr := rest_errors.NewNotFoundError(errGet.Error())
+		c.JSON(restErr.Status(), restErr)
 		return
 	}
 
@@ -89,14 +89,14 @@ func (h *Handler) Update(c *gin.Context) {
 		c.JSON(restErr.Status(), restErr)
 		return
 	}
-	movie, updateErr := h.UpdateUseCase.Handler(id, movieCommand)
+	updateErr := h.UpdateUseCase.Handler(id, movieCommand)
 	if updateErr != nil {
 		restErr := rest_errors.NewBadRequestError(updateErr.Error())
 		c.JSON(restErr.Status(), restErr)
 		return
 	}
 
-	c.JSON(http.StatusOK, &movie)
+	c.Status(http.StatusNoContent)
 }
 
 func (h *Handler) Delete(c *gin.Context) {
@@ -108,7 +108,7 @@ func (h *Handler) Delete(c *gin.Context) {
 	}
 	errDelete := h.DeleteUseCase.Handler(id)
 	if errDelete != nil {
-		restErr := rest_errors.NewBadRequestError(errDelete.Error())
+		restErr := rest_errors.NewNotFoundError(errDelete.Error())
 		c.JSON(restErr.Status(), restErr)
 		return
 	}

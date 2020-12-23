@@ -55,7 +55,6 @@ func (movieMySqlRepository *MovieMySqlRepository) Update(id int64, movie *model.
 	if movieMySqlRepository.Db.Model(&current).Update(entity.MovieEntity{Name: movie.Name, Director: movie.Director, Writer: movie.Writer, Stars: movie.Stars}).Error != nil {
 		return errors.New(fmt.Sprintf("error when updated movie with id: %v", id))
 	}
-	//movieUpdated := mapper.MovieEntityToMovie(current)
 	return nil
 }
 
