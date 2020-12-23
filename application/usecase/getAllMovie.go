@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"github.com/ederj98/hex-movies-microservice/domain/model"
-	"github.com/ederj98/hex-movies-microservice/domain/service"
+	"github.com/ederj98/hex-movies-microservice/domain/port"
 )
 
 type GetAllMovieUseCase interface {
@@ -10,12 +10,12 @@ type GetAllMovieUseCase interface {
 }
 
 type UseCaseGetAllMovie struct {
-	movieService service.MovieService
+	MovieRepository port.MovieRepository
 }
 
 func (useCaseGetAllMovie *UseCaseGetAllMovie) Handler() ([]model.Movie, error) {
 
-	movies, err := useCaseGetAllMovie.movieService.FindAll()
+	movies, err := useCaseGetAllMovie.MovieRepository.FindAll()
 	if err != nil {
 		return []model.Movie{}, err
 	}

@@ -4,7 +4,7 @@ import (
 	"github.com/ederj98/hex-movies-microservice/application/command"
 	"github.com/ederj98/hex-movies-microservice/application/factory"
 	"github.com/ederj98/hex-movies-microservice/domain/model"
-	"github.com/ederj98/hex-movies-microservice/domain/service"
+	"github.com/ederj98/hex-movies-microservice/domain/port"
 )
 
 type CreateMoviePort interface {
@@ -12,7 +12,7 @@ type CreateMoviePort interface {
 }
 
 type UseCaseMovieCreate struct {
-	movieService service.MovieService
+	MovieRepository port.MovieRepository
 }
 
 func (createUseCase *UseCaseMovieCreate) Handler(movieCommand command.MovieCommand) (model.Movie, error) {
@@ -21,7 +21,7 @@ func (createUseCase *UseCaseMovieCreate) Handler(movieCommand command.MovieComma
 	if err != nil {
 		return model.Movie{}, err
 	}
-	_, createMovieErr := createUseCase.movieService.Create(&movie)
+	createMovieErr := createUseCase.MovieRepository.Create(&movie)
 	if createMovieErr != nil {
 		return model.Movie{}, createMovieErr
 	}

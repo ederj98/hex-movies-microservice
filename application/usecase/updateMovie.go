@@ -4,7 +4,7 @@ import (
 	"github.com/ederj98/hex-movies-microservice/application/command"
 	"github.com/ederj98/hex-movies-microservice/application/factory"
 	"github.com/ederj98/hex-movies-microservice/domain/model"
-	"github.com/ederj98/hex-movies-microservice/domain/service"
+	"github.com/ederj98/hex-movies-microservice/domain/port"
 )
 
 type UpdateMoviePort interface {
@@ -12,7 +12,7 @@ type UpdateMoviePort interface {
 }
 
 type UseCaseMovieUpdate struct {
-	MovieService service.MovieService
+	MovieRepository port.MovieRepository
 }
 
 func (updateUseCase *UseCaseMovieUpdate) Handler(movieCommand command.MovieCommand) (model.Movie, error) {
@@ -21,7 +21,7 @@ func (updateUseCase *UseCaseMovieUpdate) Handler(movieCommand command.MovieComma
 	if err != nil {
 		return model.Movie{}, err
 	}
-	updateMovieErr := updateUseCase.MovieService.Update(&movie)
+	updateMovieErr := updateUseCase.MovieRepository.Update(&movie)
 	if updateMovieErr != nil {
 		return model.Movie{}, updateMovieErr
 	}

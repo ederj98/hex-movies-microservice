@@ -2,7 +2,7 @@ package usecase
 
 import (
 	"github.com/ederj98/hex-movies-microservice/domain/model"
-	"github.com/ederj98/hex-movies-microservice/domain/service"
+	"github.com/ederj98/hex-movies-microservice/domain/port"
 )
 
 type GetMovieUseCase interface {
@@ -10,12 +10,12 @@ type GetMovieUseCase interface {
 }
 
 type UseCaseGetMovie struct {
-	movieService service.MovieService
+	MovieRepository port.MovieRepository
 }
 
 func (useCaseGetMovie *UseCaseGetMovie) Handler(id int64) (model.Movie, error) {
 
-	movie, err := useCaseGetMovie.movieService.Find(id)
+	movie, err := useCaseGetMovie.MovieRepository.Find(id)
 	if err != nil {
 		return model.Movie{}, err
 	}

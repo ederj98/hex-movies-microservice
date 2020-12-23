@@ -1,20 +1,20 @@
 package usecase
 
-import "github.com/ederj98/hex-movies-microservice/domain/service"
+import "github.com/ederj98/hex-movies-microservice/domain/port"
 
 type DeleteMovieUseCase interface {
 	Handler(id int64) error
 }
 
 type UseCaseDeleteMovie struct {
-	movieService service.MovieService
+	MovieRepository port.MovieRepository
 }
 
 func (useCaseDeleteMovie *UseCaseDeleteMovie) Handler(id int64) error {
-	_, getMovieError := useCaseDeleteMovie.movieService.Find(id)
+	_, getMovieError := useCaseDeleteMovie.MovieRepository.Find(id)
 	if getMovieError != nil {
 		return getMovieError
 	}
-	err := useCaseDeleteMovie.movieService.Delete(id)
+	err := useCaseDeleteMovie.MovieRepository.Delete(id)
 	return err
 }

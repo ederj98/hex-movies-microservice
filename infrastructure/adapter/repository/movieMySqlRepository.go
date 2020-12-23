@@ -7,6 +7,7 @@ import (
 	"github.com/ederj98/hex-movies-microservice/domain/model"
 	"github.com/ederj98/hex-movies-microservice/infrastructure/adapter/repository/entity"
 	"github.com/ederj98/hex-movies-microservice/infrastructure/mapper"
+	"github.com/fmcarrero/bookstore_utils-go/logger"
 	"github.com/jinzhu/gorm"
 )
 
@@ -14,18 +15,18 @@ type MovieMySqlRepository struct {
 	Db *gorm.DB
 }
 
-func (movieMySqlRepository *MovieMySqlRepository) Save(movie *model.Movie) error {
+func (movieMySqlRepository *MovieMySqlRepository) Create(movie *model.Movie) error {
 	var movieEntity entity.MovieEntity
-	movieDb = mapper.MovieToMovieEntity(*movie)
+	movieEntity = mapper.MovieToMovieEntity(*movie)
 	if err := movieMySqlRepository.Db.Create(&movieEntity).Error; err != nil {
-		logger.Error(fmt.Sprintf("can't work with %s", movieEntity.Name))
+		logger.Error(fmt.Sprintf("can't work with %s", movieEntity.Name), err)
 		return errors.New(fmt.Sprintf("can't work with %s", movieEntity.Name))
 	}
 	movie.Id = movieEntity.Id
 	return nil
 }
 
-func (movieMySqlRepository *MovieMySqlRepository) Get(id int64) (model.Movie, error) {
+func (movieMySqlRepository *MovieMySqlRepository) Find(id int64) (model.Movie, error) {
 	var movieEntity entity.MovieEntity
 	if movieMySqlRepository.Db.First(&movieEntity, id).Error != nil {
 		return model.Movie{}, errors.New(fmt.Sprintf("movie with id: %d not found", id))
@@ -34,7 +35,7 @@ func (movieMySqlRepository *MovieMySqlRepository) Get(id int64) (model.Movie, er
 	return movie, nil
 }
 
-func (movieMySqlRepository *MovieMySqlRepository) GetAll() ([]model.Movie, error) {
+func (movieMySqlRepository *MovieMySqlRepository) FindAll() ([]model.Movie, error) {
 	var moviesEntities []entity.MovieEntity
 	if movieMySqlRepository.Db.Find(&moviesEntities).Error != nil {
 		return nil, errors.New(fmt.Sprintf("no movies found"))
@@ -46,16 +47,16 @@ func (movieMySqlRepository *MovieMySqlRepository) GetAll() ([]model.Movie, error
 	return movies, nil
 }
 
-func (movieMySqlRepository *MovieMySqlRepository) Update(movie model.Movie) error {
+func (movieMySqlRepository *MovieMySqlRepository) Update(movie *model.Movie) error {
 	var current entity.MovieEntity
 	if movieMySqlRepository.Db.First(&current, movie.Id).RecordNotFound() {
-		return nil, errors.New(fmt.Sprintf("error when updated movie %v", movie.Id))
+		return errors.New(fmt.Sprintf("error when updated movie %v", movie.Id))
 	}
 	if movieMySqlRepository.Db.Model(&current).Update(entity.MovieEntity{Name: movie.Name, Director: movie.Director, Writer: movie.Writer, Stars: movie.Stars}).Error != nil {
-		return nil, errors.New(fmt.Sprintf("error when updated movie %v", movie.Id))
+		return errors.New(fmt.Sprintf("error when updated movie %v", movie.Id))
 	}
-	movieUpdated := mapper.MovieEntityToMovie(current)
-	return &movieUpdated, nil
+	//movieUpdated := mapper.MovieEntityToMovie(current)
+	return nil
 }
 
 func (movieMySqlRepository *MovieMySqlRepository) Delete(id int64) error {
