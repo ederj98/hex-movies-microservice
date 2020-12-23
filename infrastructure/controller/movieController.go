@@ -5,7 +5,6 @@ import (
 	"strconv"
 
 	"github.com/ederj98/hex-movies-microservice/application/command"
-	"github.com/ederj98/hex-movies-microservice/infrastructure/marshall"
 
 	"github.com/ederj98/hex-movies-microservice/application/usecase"
 	"github.com/fmcarrero/bookstore_utils-go/rest_errors"
@@ -60,7 +59,7 @@ func (h *Handler) Get(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, marshall.Marshall(false, movie))
+	c.JSON(http.StatusOK, movie)
 
 }
 
@@ -72,7 +71,7 @@ func (h *Handler) GetAll(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, marshall.MarshallArray(false, movies))
+	c.JSON(http.StatusOK, movies)
 }
 
 func (h *Handler) Update(c *gin.Context) {
