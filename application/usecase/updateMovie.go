@@ -17,7 +17,7 @@ type UseCaseMovieUpdate struct {
 
 func (updateUseCase *UseCaseMovieUpdate) Handler(movieCommand command.MovieCommand) (model.Movie, error) {
 
-	movie, err := factory.Create(movieCommand)
+	movie, err := factory.Update(movieCommand)
 	if err != nil {
 		return model.Movie{}, err
 	}

@@ -9,6 +9,7 @@ import (
 
 	"github.com/fmcarrero/bookstore_utils-go/logger"
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 const (
@@ -28,11 +29,12 @@ func GetDatabaseInstance() *gorm.DB {
 	port, _ := strconv.ParseInt(os.Getenv(MysqlPort), 10, 64)
 
 	dataSource := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=UTC", userName, password, host, port, schema)
+	//fmt.Println(dataSource)
 	db, err := gorm.Open("mysql", dataSource)
 	if err != nil {
 		logger.Error(err.Error(), err)
 		_ = db.Close()
-		panic("database not working")
+		panic("Database connection failed")
 	}
 	db.SingularTable(true)
 	migrateDatabase(db)

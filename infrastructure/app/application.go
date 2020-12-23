@@ -18,7 +18,11 @@ var (
 
 func StartApplication() {
 
-	_ = godotenv.Load()
+	err := godotenv.Load(".env")
+	if err != nil {
+		logger.Error("Error loading .env file", err)
+	}
+
 	router.Use(middlewares.ErrorHandler())
 	movieRepository := getMovieRepository()
 	var handler = createHandler(movieRepository)
