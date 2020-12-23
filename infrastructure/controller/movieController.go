@@ -76,13 +76,20 @@ func (h *Handler) GetAll(c *gin.Context) {
 }
 
 func (h *Handler) Update(c *gin.Context) {
+	id, movieErr := strconv.ParseInt(c.Param("id"), 10, 64)
+	if movieErr != nil {
+		restErr := rest_errors.NewBadRequestError("id should be valid")
+		c.JSON(restErr.Status(), restErr)
+		return
+	}
+
 	var movieCommand command.MovieCommand
 	if err := c.ShouldBindJSON(&movieCommand); err != nil {
 		restErr := rest_errors.NewBadRequestError("invalid json")
 		c.JSON(restErr.Status(), restErr)
 		return
 	}
-	movie, updateErr := h.UpdateUseCase.Handler(movieCommand)
+	movie, updateErr := h.UpdateUseCase.Handler(id, movieCommand)
 	if updateErr != nil {
 		restErr := rest_errors.NewBadRequestError(updateErr.Error())
 		c.JSON(restErr.Status(), restErr)

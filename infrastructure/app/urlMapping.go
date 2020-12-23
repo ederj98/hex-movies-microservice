@@ -7,7 +7,7 @@ import (
 func mapUrls(handler controller.RedirectMovieHandler) {
 
 	router.POST("/movies", handler.Create)
-	router.PUT("/movies", handler.Update)
+	router.PUT("/movies/:id", handler.Update)
 	router.DELETE("/movies/:id", handler.Delete)
 	router.GET("/movies/:id", handler.Get)
 	router.GET("/movies", handler.GetAll)

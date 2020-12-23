@@ -6,6 +6,6 @@ type MovieRepository interface {
 	Create(*model.Movie) error
 	Find(int64) (model.Movie, error)
 	FindAll() ([]model.Movie, error)
-	Update(*model.Movie) error
+	Update(int64, *model.Movie) error
 	Delete(int64) error
 }

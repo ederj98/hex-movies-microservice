@@ -8,20 +8,20 @@ import (
 )
 
 type UpdateMoviePort interface {
-	Handler(movieCommand command.MovieCommand) (model.Movie, error)
+	Handler(id int64, movieCommand command.MovieCommand) (model.Movie, error)
 }
 
 type UseCaseMovieUpdate struct {
 	MovieRepository port.MovieRepository
 }
 
-func (updateUseCase *UseCaseMovieUpdate) Handler(movieCommand command.MovieCommand) (model.Movie, error) {
+func (updateUseCase *UseCaseMovieUpdate) Handler(id int64, movieCommand command.MovieCommand) (model.Movie, error) {
 
-	movie, err := factory.Update(movieCommand)
+	movie, err := factory.Create(movieCommand)
 	if err != nil {
 		return model.Movie{}, err
 	}
-	updateMovieErr := updateUseCase.MovieRepository.Update(&movie)
+	updateMovieErr := updateUseCase.MovieRepository.Update(id, &movie)
 	if updateMovieErr != nil {
 		return model.Movie{}, updateMovieErr
 	}

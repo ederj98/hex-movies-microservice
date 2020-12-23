@@ -10,9 +10,3 @@ func Create(movieCommand command.MovieCommand) (model.Movie, error) {
 	movie, err := movie.Create(movieCommand.Name, movieCommand.Director, movieCommand.Writer, movieCommand.Stars)
 	return movie, err
 }
-
-func Update(movieCommand command.MovieCommand) (model.Movie, error) {
-	var movie model.Movie
-	movie, err := movie.CreateWithId(movieCommand.Id, movieCommand.Name, movieCommand.Director, movieCommand.Writer, movieCommand.Stars)
-	return movie, err
-}
